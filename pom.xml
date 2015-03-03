@@ -8,6 +8,22 @@
     <artifactId>reflection-builder</artifactId>
     <version>1.0</version>
 
+    <name>reflection-builder</name>
+    <description>Util library for setting all values in an entity via reflection</description>
+    <url>https://github.com/damienbiggs/reflection-builder</url>
+    <scm>
+        <connection>scm:git:git@github.com:damienbiggs/reflection-builder.git</connection>
+        <developerConnection>scm:git:git@github.com:damienbiggs/reflection-builder.git</developerConnection>
+        <url>git@github.com:damienbiggs/reflection-builder.git</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Damien Biggs</name>
+            <email>damien.biggs@gmail.com</email>
+        </developer>
+    </developers>
+
     <properties>
         <apache.commons.version>3.3.2</apache.commons.version>
         <testng.version>6.8.8</testng.version>
