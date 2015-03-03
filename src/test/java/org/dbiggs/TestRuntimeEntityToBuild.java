@@ -23,7 +23,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * Contains every type that the runtime entity can populate
  */
-public class TestRuntimeEntityToBuild {
+public class TestRuntimeEntityToBuild extends BaseRunTimeEntityToBuild {
     private Boolean booleanValue;
     private Byte byteValue;
     private Short shortValue;
@@ -56,7 +56,7 @@ public class TestRuntimeEntityToBuild {
     }
 
     private boolean checkAllFieldValues(boolean valuesShouldBeNull) throws IllegalAccessException {
-        List<Field> fields = Arrays.asList(this.getClass().getFields());
+        List<Field> fields = Arrays.asList(this.getClass().getDeclaredFields());
         for (Field field : fields) {
             boolean valueIsSet = checkFieldValue(this, field, valuesShouldBeNull);
             if (!valueIsSet) {

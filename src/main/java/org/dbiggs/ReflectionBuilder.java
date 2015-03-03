@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.Builder;
 
 import javax.xml.bind.annotation.XmlTransient;
 
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -114,6 +115,28 @@ public class ReflectionBuilder<T> implements Builder {
     }
 
     /**
+     * @see #with(String, Object)
+     */
+    public ReflectionBuilder<T> with(String fieldName, Builder builder) throws NoSuchFieldException {
+        return with(fieldName, builder.build());
+    }
+
+    /**
+     * Sets a property using the specified field name and value.
+     * Since the field name can only be checked at runtime, this can be quite brittle.
+     * If the value being set has matches only one field in the target class, then there is no need to specify the name.
+     *
+     * @param fieldName field to set value for
+     * @param value value to use
+     * @return The current builder
+     */
+    public ReflectionBuilder<T> with(String fieldName, Object value) throws NoSuchFieldException {
+        Field matchingField = getFieldByNameRecursively(entityToBuild.getClass(), fieldName);
+        setFieldValue(value, matchingField);
+        return this;
+    }
+
+    /**
      * Sets a property from the built entity.
      * If there is more than one property of this entity type, an exception will be thrown
      *
@@ -164,16 +187,13 @@ public class ReflectionBuilder<T> implements Builder {
             Class classToUse = getRealType(field);
             if (classToUse == valueType || classToUse.isAssignableFrom(valueType)) {
                 // don't set transient fields
-                if (field.getAnnotation(XmlTransient.class) != null) {
+                if (field.getAnnotation(XmlTransient.class) != null || field.getAnnotation(Transient.class) != null) {
                     continue;
                 }
                 if (selectedField != null) {
                     throw new RuntimeException(String.format("Both %s and %s are of type %s, " +
-                                    "with method should only be used to " +
-                                    "set fields that have a unique type in class %s", selectedField.getName(),
-                            field.getName(), valueType
-                                    .getSimpleName(), className
-                    ));
+                                    "with method should only be used to set fields that have a unique type in class %s",
+                            selectedField.getName(), field.getName(), valueType.getSimpleName(), className));
                 }
                 selectedField = field;
             }
@@ -382,6 +402,17 @@ public class ReflectionBuilder<T> implements Builder {
     private boolean ignoreClassType(Class type) {
         return Map.class.isAssignableFrom(type) || Collection.class.isAssignableFrom(type) || Modifier.isAbstract
                 (type.getModifiers());
+    }
+
+    private Field getFieldByNameRecursively(Class clazz, String fieldName) throws NoSuchFieldException {
+        try {
+            return clazz.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException nsfe) {
+            if (clazz == Object.class) {
+                throw nsfe;
+            }
+            return getFieldByNameRecursively(clazz.getSuperclass(), fieldName);
+        }
     }
 
 }

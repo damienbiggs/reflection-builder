@@ -7,7 +7,7 @@ Example of usage
 User testUser = ReflectionBuilder.aGenerated(User.class).build();
 This will create a User that has a value set for every field.
 E.g. username, address1, address2 etc are set
-  
+ 
 If user has a company object field, that will have values set as well.
 
 Specific values can be set for fields that have a single field type using the helper methods.
