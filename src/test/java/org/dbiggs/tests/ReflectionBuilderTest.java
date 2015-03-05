@@ -1,6 +1,7 @@
-package org.dbiggs;
+package org.dbiggs.tests;
 
 
+import org.dbiggs.tests.entities.TestRuntimeEntityToBuild;
 import org.testng.annotations.Test;
 
 import java.util.UUID;

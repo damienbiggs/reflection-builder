@@ -3,7 +3,7 @@
  * Copyright (c) 2014 VMware, Inc. All rights reserved.
  * VMware Confidential.
  */
-package org.dbiggs;
+package org.dbiggs.tests.entities;
 
 import javax.xml.bind.annotation.XmlTransient;
 
